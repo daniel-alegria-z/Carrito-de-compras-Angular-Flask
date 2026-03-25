@@ -1,0 +1,8 @@
+<aside class="toast-wrap" aria-live="polite" aria-atomic="true">
+  @for (item of toast.toasts(); track item.id) {
+    <article class="toast panel-premium" [class.exito]="item.tipo === 'exito'" [class.error]="item.tipo === 'error'" [class.info]="item.tipo === 'info'" [class.cerrando]="item.cerrando">
+      <p>{{ item.mensaje }}</p>
+      <button type="button" (click)="toast.ocultar(item.id)" aria-label="Cerrar notificacion">×</button>
+    </article>
+  }
+</aside>

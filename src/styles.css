@@ -1,0 +1,108 @@
+:root {
+  --bg: #0d1117;
+  --bg-soft: #10151d;
+  --panel: #161b22;
+  --panel-alt: #1c2330;
+  --text: #f0f6fc;
+  --muted: #9aa8ba;
+  --gold: #d4af37;
+  --gold-soft: rgba(212, 175, 55, 0.24);
+  --primary: #8b0000;
+  --primary-2: #304a75;
+  --ok: #2ea97e;
+  --warn: #cf9f2f;
+  --danger: #ce5252;
+  --radius: 14px;
+  --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.22);
+  --shadow: 0 14px 32px rgba(0, 0, 0, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(850px 480px at 8% -8%, rgba(139, 0, 0, 0.3), transparent 55%),
+    radial-gradient(760px 420px at 92% -8%, rgba(212, 175, 55, 0.18), transparent 52%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem 1rem 1.6rem;
+}
+
+.panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.panel-premium {
+  background:
+    linear-gradient(145deg, rgba(212, 175, 55, 0.09), rgba(255, 255, 255, 0) 32%),
+    var(--panel);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.btn-premium {
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22), rgba(212, 175, 55, 0.08));
+  color: #f8e6aa;
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-premium:hover {
+  transform: translateY(-1px);
+  border-color: rgba(212, 175, 55, 0.62);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.14));
+}
+
+.btn-premium:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.table-premium {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-premium thead th {
+  color: #f7dc8a;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.28);
+}
+
+.table-premium th,
+.table-premium td {
+  text-align: left;
+  padding: 0.78rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}

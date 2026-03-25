@@ -1,0 +1,42 @@
+<section>
+  <h1>Confirmación de orden</h1>
+
+  @if (cargando) {
+    <article class="panel-premium estado-wrap">
+      <p>Cargando detalles de la orden...</p>
+    </article>
+  } @else if (!orden) {
+    <article class="panel-premium estado-wrap">
+      <p>No fue posible mostrar la orden.</p>
+      <a class="btn-premium" routerLink="/">Volver al catálogo</a>
+    </article>
+  } @else {
+    <article class="panel-premium estado-wrap">
+      <h2>Pago confirmado</h2>
+      <p>Tu orden <strong>{{ orden.id }}</strong> fue registrada con éxito.</p>
+      <p><strong>Fecha de compra:</strong> {{ fechaOrden }}</p>
+    </article>
+
+    <article class="panel-premium detalle-wrap">
+      <h2>Detalle de la compra</h2>
+      @for (item of orden.items; track item.id) {
+        <div class="fila-item">
+          <div>
+            <strong>{{ item.nombre }}</strong>
+            <p>Cantidad: {{ item.cantidad }}</p>
+          </div>
+          <span>{{ item.subtotal | currency: 'USD' }}</span>
+        </div>
+      }
+
+      <div class="linea"><span>Subtotal</span><strong>{{ orden.subtotal | currency: 'USD' }}</strong></div>
+      <div class="linea"><span>IVA</span><strong>{{ orden.iva | currency: 'USD' }}</strong></div>
+      <div class="linea total"><span>Total</span><strong>{{ orden.total | currency: 'USD' }}</strong></div>
+
+      <div class="acciones">
+        <a class="btn-premium" routerLink="/">Seguir comprando</a>
+        <a class="btn-premium" routerLink="/carrito">Ver carrito</a>
+      </div>
+    </article>
+  }
+</section>

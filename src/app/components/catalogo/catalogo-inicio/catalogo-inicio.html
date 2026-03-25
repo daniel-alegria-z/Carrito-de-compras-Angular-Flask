@@ -1,0 +1,49 @@
+<section (pointerdown)="desbloquearAudio(true)">
+  <h1>Catálogo Avengers</h1>
+
+  <article class="intro panel-premium">
+    <div class="intro-kicker">Colección Titán</div>
+    <h2>Forja tu escuadrón legendario</h2>
+    <p>
+      Explora figuras, accesorios y sets oficiales para reunir a los héroes más poderosos de la Tierra.
+      Aprovecha la experiencia premium del cuartel Avengers y completa tu compra con estilo.
+    </p>
+    <div class="intro-tags" aria-label="Categorias destacadas">
+      <span>Figuras de Acción</span>
+      <span>Ediciones Endgame</span>
+      <span>Sets de Colección</span>
+    </div>
+  </article>
+
+  <aside class="nudge-float panel-premium" [class.visible]="mostrarNudge()" role="status" aria-live="polite" [attr.aria-hidden]="!mostrarNudge()">
+    <p>{{ mensajeNudge() }}</p>
+  </aside>
+
+  @if (cargando()) {
+    <div class="grid">
+      @for (s of skeletonItems; track s) {
+        <article class="card panel-premium skeleton" aria-hidden="true">
+          <div class="ph ph-img"></div>
+          <div class="ph ph-title"></div>
+          <div class="ph ph-price"></div>
+          <div class="ph ph-stock"></div>
+          <div class="ph ph-btn"></div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="grid">
+      @for (producto of productos(); track producto.id) {
+        <article class="card panel-premium">
+          <img [src]="'img/' + producto.imagen" [alt]="producto.nombre" loading="lazy" />
+          <h2>{{ producto.nombre }}</h2>
+          <p class="precio">{{ producto.precio | currency: 'USD' }}</p>
+          <p class="stock">Stock: {{ producto.stock }}</p>
+          <button class="btn-premium" type="button" [disabled]="producto.stock <= 0" (click)="agregar(producto)">
+            {{ producto.stock > 0 ? 'Agregar al carrito' : 'Sin stock' }}
+          </button>
+        </article>
+      }
+    </div>
+  }
+</section>

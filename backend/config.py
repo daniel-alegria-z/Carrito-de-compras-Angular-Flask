@@ -1,0 +1,21 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
+class Config:
+    BASE_DIR = Path(__file__).resolve().parent
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "DATABASE_URL", f"sqlite:///{(BASE_DIR / 'carrito.db').as_posix()}"
+    )
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CORS_ORIGINS = [
+        origin.strip()
+        for origin in os.getenv("CORS_ORIGINS", "http://localhost:4200").split(",")
+        if origin.strip()
+    ]

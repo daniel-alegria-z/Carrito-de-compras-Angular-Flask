@@ -1,0 +1,13 @@
+<header class="topbar panel-premium">
+  <a class="brand" routerLink="/">Aetherium Avengers Vault</a>
+
+  <nav>
+    <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Catálogo</a>
+    <a routerLink="/carrito" routerLinkActive="activo">Carrito</a>
+  </nav>
+
+  <a class="badge" [class.rebote]="rebote" routerLink="/carrito" aria-label="Ir al carrito">
+    <span>{{ cantidad }} item(s)</span>
+    <strong>{{ total | currency: 'USD' }}</strong>
+  </a>
+</header>

@@ -1,0 +1,62 @@
+<section>
+  <h1>Checkout seguro</h1>
+
+  @if (items.length === 0) {
+    <article class="panel-premium vacio">
+      <p>Aun no agregaste productos para finalizar tu misión.</p>
+      <a class="btn-premium" routerLink="/">Ir al catálogo</a>
+    </article>
+  } @else {
+    <div class="layout">
+      <article class="panel-premium bloque lista">
+        <h2>Items seleccionados</h2>
+        @if (validando) {
+          <p class="estado estado-info">Validando totales con el servidor...</p>
+        }
+        @for (item of items; track item.producto.id) {
+          <div class="fila-item">
+            <div>
+              <strong>{{ item.producto.nombre }}</strong>
+              <p>Cantidad: {{ item.cantidad }}</p>
+            </div>
+            <span>{{ item.producto.precio * item.cantidad | currency: 'USD' }}</span>
+          </div>
+        }
+      </article>
+
+      <article class="panel-premium bloque resumen">
+        <h2>Pago y desglose final</h2>
+
+        <label class="field">
+          <span>Nombre completo</span>
+          <input type="text" [(ngModel)]="usuario.nombre" placeholder="Ej: Dania R" />
+        </label>
+
+        <label class="field">
+          <span>Correo electronico</span>
+          <input type="email" [(ngModel)]="usuario.email" placeholder="correo@ejemplo.com" />
+        </label>
+
+        <label class="field">
+          <span>Metodo de pago</span>
+          <select [(ngModel)]="metodo">
+            <option value="tarjeta">Tarjeta</option>
+            <option value="transferencia">Transferencia</option>
+          </select>
+        </label>
+
+        <div class="linea"><span>Subtotal</span><strong>{{ subtotal | currency: 'USD' }}</strong></div>
+        <div class="linea"><span>IVA (19%)</span><strong>{{ iva | currency: 'USD' }}</strong></div>
+        <div class="linea"><span>Descuento</span><strong>-{{ descuento | currency: 'USD' }}</strong></div>
+        <div class="linea total"><span>Total Final</span><strong>{{ totalFinal | currency: 'USD' }}</strong></div>
+
+        <div class="acciones">
+          <button class="btn-premium" type="button" [disabled]="procesandoPago || validando" (click)="confirmarCompra()">
+            {{ procesandoPago ? 'Procesando pago...' : 'Pagar ahora' }}
+          </button>
+          <a class="btn-premium" routerLink="/carrito">Volver al carrito</a>
+        </div>
+      </article>
+    </div>
+  }
+</section>

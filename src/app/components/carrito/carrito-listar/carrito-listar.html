@@ -1,0 +1,89 @@
+<section>
+  <h1 class="titulo-premium">Arsenal de Compra Avengers</h1>
+
+  @if (items.length === 0) {
+    <article class="panel-premium vacio-wrap">
+      <div class="icono-vacio" aria-hidden="true">🛡️</div>
+      <p class="vacio">Tu equipo está incompleto, ¡recluta héroes!</p>
+      <a class="btn-premium" routerLink="/">Volver al catálogo</a>
+    </article>
+  } @else {
+    <div class="carrito-grid">
+      <div>
+        <div class="panel-premium tabla-wrap">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of items; track item.producto.id; let i = $index) {
+                <tr>
+                  <td>{{ item.producto.nombre }}</td>
+                  <td>
+                    <div class="cantidad-control">
+                      <button class="circle-btn" type="button" (click)="disminuir(i)">−</button>
+                      <span>{{ item.cantidad }}</span>
+                      <button class="circle-btn" type="button" (click)="aumentar(i)" [disabled]="item.cantidad >= item.producto.stock">+</button>
+                    </div>
+                  </td>
+                  <td>{{ item.producto.precio | currency: 'USD' }}</td>
+                  <td>{{ item.producto.precio * item.cantidad | currency: 'USD' }}</td>
+                  <td><button class="btn-premium" type="button" (click)="eliminar(i)">Eliminar</button></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mobile-list">
+          @for (item of items; track item.producto.id; let i = $index) {
+            <article class="panel-premium mobile-card">
+              <h3>{{ item.producto.nombre }}</h3>
+              <div class="linea-card">
+                <span>Precio</span>
+                <strong>{{ item.producto.precio | currency: 'USD' }}</strong>
+              </div>
+              <div class="linea-card">
+                <span>Subtotal</span>
+                <strong>{{ item.producto.precio * item.cantidad | currency: 'USD' }}</strong>
+              </div>
+              <div class="linea-card cantidad-row">
+                <span>Cantidad</span>
+                <div class="cantidad-control">
+                  <button class="circle-btn" type="button" (click)="disminuir(i)">−</button>
+                  <span>{{ item.cantidad }}</span>
+                  <button class="circle-btn" type="button" (click)="aumentar(i)" [disabled]="item.cantidad >= item.producto.stock">+</button>
+                </div>
+              </div>
+              <button class="btn-premium" type="button" (click)="eliminar(i)">Eliminar</button>
+            </article>
+          }
+        </div>
+      </div>
+
+      <aside class="panel-premium resumen-panel">
+        <h2>Resumen de compra</h2>
+        <div class="totales-mini">
+          <span>Subtotal: {{ subtotal | currency: 'USD' }}</span>
+          <span>IVA 19%: {{ iva | currency: 'USD' }}</span>
+          <span>Descuento: -{{ descuento | currency: 'USD' }}</span>
+        </div>
+        @if (descuento > 0) {
+          <p class="descuento-label">{{ motivoDescuento }}</p>
+        }
+        <p class="total-final">Total final: {{ total | currency: 'USD' }}</p>
+
+        <div class="acciones acciones-resumen">
+          <button type="button" class="btn-premium" (click)="irCheckout()">Ir al checkout</button>
+          <button type="button" class="btn-premium limpiar" (click)="limpiar()">Vaciar carrito</button>
+        </div>
+      </aside>
+    </div>
+  }
+</section>

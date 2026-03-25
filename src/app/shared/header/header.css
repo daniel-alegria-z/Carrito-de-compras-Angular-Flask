@@ -1,0 +1,99 @@
+.topbar {
+  max-width: 1120px;
+  margin: 0.75rem auto 1rem;
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 14px;
+  position: sticky;
+  top: 0.5rem;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.brand {
+  font-size: 1.24rem;
+  font-weight: 900;
+  color: #f4de95;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, #f8ebbf, #d4af37 45%, #f8ebbf 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 12px 25px rgba(212, 175, 55, 0.2);
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+nav a {
+  color: var(--muted);
+  padding: 0.4rem 0.68rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+nav a.activo {
+  color: #f7dc8a;
+  border-color: rgba(212, 175, 55, 0.42);
+  background: rgba(212, 175, 55, 0.14);
+}
+
+.badge {
+  margin-left: 0.5rem;
+  display: grid;
+  gap: 0.1rem;
+  justify-items: end;
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid rgba(212, 175, 55, 0.36);
+  padding: 0.42rem 0.7rem;
+  border-radius: 12px;
+}
+
+.badge span {
+  font-size: 0.78rem;
+  color: #eed684;
+}
+
+.badge strong {
+  color: #fff5c9;
+}
+
+.badge.rebote {
+  animation: badge-bounce 0.28s ease-in-out;
+}
+
+@keyframes badge-bounce {
+  0% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 780px) {
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  nav {
+    order: 3;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .badge {
+    margin-left: auto;
+  }
+}

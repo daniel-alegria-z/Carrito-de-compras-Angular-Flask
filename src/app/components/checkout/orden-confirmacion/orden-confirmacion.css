@@ -1,0 +1,58 @@
+h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.estado-wrap,
+.detalle-wrap {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.estado-wrap h2,
+.detalle-wrap h2 {
+  margin: 0 0 0.65rem;
+  color: #f0d98a;
+}
+
+.estado-wrap p {
+  margin: 0.35rem 0;
+}
+
+.fila-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fila-item p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+}
+
+.linea {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.38rem 0;
+}
+
+.linea.total {
+  margin-top: 0.35rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.linea.total strong {
+  color: var(--gold);
+}
+
+.acciones {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
