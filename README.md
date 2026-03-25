@@ -1,45 +1,45 @@
 # Carrito Avengers (Angular + Flask)
 
-Aplicacion full-stack de carrito de compras con tematica Avengers.
+Aplicación full-stack de carrito de compras con temática Avengers.
 
 El proyecto incluye:
-- Frontend en Angular para catalogo, carrito, checkout y confirmacion.
-- Backend en Flask con API REST para productos, validacion de carrito y simulacion de pasarela de pagos.
-- Persistencia local con SQLite para productos, ordenes y pagos.
+- Frontend en Angular para catálogo, carrito, checkout y confirmación.
+- Backend en Flask con API REST para productos, validación de carrito y simulación de pasarela de pagos.
+- Persistencia local con SQLite para productos, órdenes y pagos.
 
 ## Contenido
 
-- Descripcion funcional
-- Stack tecnologico
+- Descripción funcional
+- Stack tecnológico
 - Arquitectura general
 - Requisitos previos
-- Instalacion y ejecucion local
+- Instalación y ejecución local
 - Variables de entorno
 - Endpoints API
 - Flujo de compra
 - Estructura del proyecto
-- Scripts utiles
+- Scripts útiles
 - Troubleshooting
 - Estado actual y siguientes mejoras
 
-## Descripcion funcional
+## Descripción funcional
 
 Flujo principal de usuario:
-1. Ver catalogo de productos.
+1. Ver catálogo de productos.
 2. Agregar productos al carrito.
 3. Ajustar cantidades y revisar resumen.
 4. Ir a checkout y validar totales con backend.
 5. Procesar pago (pasarela simulada).
-6. Ver confirmacion de orden con detalle.
+6. Ver confirmación de orden con detalle.
 
 Reglas de negocio implementadas:
-- Validacion de stock en servidor.
-- Calculo server-side de subtotal, IVA (19%) y total.
-- Simulacion de pagos (90% exito, 10% rechazo).
-- Creacion de orden y pago en base de datos.
+- Validación de stock en servidor.
+- Cálculo server-side de subtotal, IVA (19%) y total.
+- Simulación de pagos (90% éxito, 10% rechazo).
+- Creación de orden y pago en base de datos.
 - Descuento de inventario solo en pagos aprobados.
 
-## Stack tecnologico
+## Stack tecnológico
 
 ### Frontend
 - Angular 20
@@ -57,9 +57,9 @@ Reglas de negocio implementadas:
 ## Arquitectura general
 
 - `src/`: interfaz Angular.
-- `backend/`: API Flask y logica de dominio.
+- `backend/`: API Flask y lógica de dominio.
 
-Integracion actual:
+Integración actual:
 - El frontend consume API en `http://127.0.0.1:5000/api`.
 - La base de datos se crea en `backend/carrito.db` (archivo local, no versionado).
 
@@ -71,7 +71,7 @@ Integracion actual:
 - pip
 - PowerShell o terminal compatible
 
-## Instalacion y ejecucion local
+## Instalación y ejecución local
 
 ### 1) Clonar e instalar frontend
 
@@ -101,7 +101,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 pip install -r backend/requirements.txt
 ```
 
-### 4) Inicializar base de datos y seed
+### 4) Inicializar base de datos y seeding
 
 ```bash
 python -m flask --app backend.app init-db
@@ -139,8 +139,8 @@ DATABASE_URL=
 ```
 
 Notas:
-- Si `DATABASE_URL` esta vacio, se usa SQLite local en `backend/carrito.db`.
-- `CORS_ORIGINS` acepta multiples origenes separados por coma.
+- Si `DATABASE_URL` está vacío, se usa SQLite local en `backend/carrito.db`.
+- `CORS_ORIGINS` acepta múltiples orígenes separados por coma.
 
 ## Endpoints API
 
@@ -189,7 +189,7 @@ Response (ejemplo):
 		"items": [
 			{
 				"id": 1,
-				"nombre": "Figura de Accion Iron Man",
+				"nombre": "Figura de Acción Iron Man",
 				"precio": 19.99,
 				"cantidad": 2,
 				"subtotal": 39.98
@@ -223,7 +223,7 @@ Request:
 }
 ```
 
-Response exito (200):
+Response éxito (200):
 
 ```json
 {
@@ -271,7 +271,7 @@ Response (ejemplo):
 		"items": [
 			{
 				"id": 1,
-				"nombre": "Figura de Accion Iron Man",
+				"nombre": "Figura de Acción Iron Man",
 				"cantidad": 1,
 				"precio": 19.99,
 				"subtotal": 19.99
@@ -288,14 +288,14 @@ Response (ejemplo):
 
 ## Flujo de compra
 
-1. Catalogo carga productos desde backend.
+1. Catálogo carga productos desde backend.
 2. Usuario arma carrito en frontend.
 3. Checkout valida carrito en servidor.
-4. Usuario confirma pago con metodo y datos.
+4. Usuario confirma pago con método y datos.
 5. Backend simula pasarela:
 	 - Si aprueba: crea orden, crea pago, descuenta stock.
 	 - Si rechaza: responde motivo, no modifica stock.
-6. Frontend redirige a pantalla de confirmacion y consulta orden por id.
+6. Frontend redirige a pantalla de confirmación y consulta orden por id.
 
 ## Estructura del proyecto
 
@@ -328,7 +328,7 @@ carrito-angular/
 				services/
 ```
 
-## Scripts utiles
+## Scripts útiles
 
 ### Frontend
 
@@ -363,25 +363,25 @@ Verifica `CORS_ORIGINS` en backend y que incluya `http://localhost:4200`.
 
 ### Error por entorno Python no activo
 
-Asegurate de activar `.venv` antes de usar comandos de Flask.
+Asegúrate de activar `.venv` antes de usar comandos de Flask.
 
 ## Estado actual y siguientes mejoras
 
 Estado actual:
 - MVP funcional frontend + backend.
 - API validada manualmente con Insomnia.
-- Checkout y confirmacion conectados a backend.
+- Checkout y confirmación conectados a backend.
 
 Mejoras recomendadas:
-- Configuracion de URL API por ambientes (dev/prod).
-- Autenticacion de usuarios.
-- Integracion de pasarela real (Stripe/Mercado Pago).
+- Configuración de URL API por ambientes (dev/prod).
+- Autenticación de usuarios.
+- Integración de pasarela real (Stripe/Mercado Pago).
 - Pruebas automatizadas backend (pytest) y e2e frontend.
 - Pipeline CI para build y checks.
 
-## Autoria
+## Autoría
 
-**Daniel Esteban Alegria Zamora**  
+**Daniel Esteban Alegría Zamora**  
 Software Developer  
 Contacto: daniel.alegria.z@outlook.com  
 LinkedIn: https://www.linkedin.com/in/daniel-esteban-a-52b6752a0/
@@ -390,4 +390,4 @@ Contexto del proyecto: proyecto personal.
 
 ---
 
-Proyecto desarrollado con enfoque academico/practico para demostrar arquitectura full-stack, validaciones server-side y flujo de compra end-to-end.
+Proyecto desarrollado con enfoque académico/práctico para demostrar arquitectura full-stack, validaciones server-side y flujo de compra end-to-end.
