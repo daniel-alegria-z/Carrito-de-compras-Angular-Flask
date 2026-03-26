@@ -23,6 +23,7 @@ export class OrdenConfirmacionComponent implements OnInit {
   fechaOrden = '';
 
   ngOnInit(): void {
+    // Toma el codigo desde la URL para consultar el detalle real de la orden.
     const codigo = this.route.snapshot.paramMap.get('id');
     if (!codigo) {
       this.cargando = false;
@@ -39,6 +40,7 @@ export class OrdenConfirmacionComponent implements OnInit {
         }
 
         this.orden = response.orden;
+        // Se muestra fecha amigable para evitar formato ISO crudo en UI.
         this.fechaOrden = this.formatearFecha(response.orden.timestamp ?? response.orden.createdAt);
       },
       error: (error: HttpErrorResponse) => {
@@ -53,6 +55,7 @@ export class OrdenConfirmacionComponent implements OnInit {
   }
 
   private formatearFecha(fechaIso?: string): string {
+    // Convierte ISO UTC en formato local legible para el usuario.
     if (!fechaIso) {
       return 'Fecha no disponible';
     }

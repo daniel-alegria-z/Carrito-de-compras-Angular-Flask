@@ -12,10 +12,12 @@ export class ProductoService {
   private readonly apiUrl = 'http://127.0.0.1:5000/api/productos';
 
   obtenerProductos(): Observable<Producto[]> {
+    // En SSR devuelve datos locales para evitar llamadas HTTP en render del servidor.
     if (!isPlatformBrowser(this.platformId)) {
       return of(PRODUCTOS_DATA);
     }
 
+    // En navegador consume API real; si falla, usa fallback para no romper la vista.
     return this.http.get<Producto[]>(this.apiUrl).pipe(
       catchError(() => of(PRODUCTOS_DATA))
     );

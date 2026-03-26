@@ -14,6 +14,7 @@ export class CarritoService {
   readonly revision = this._revision.asReadonly();
 
   getCarrito(): ItemCarrito[] {
+    // El carrito vive en sessionStorage para mantener estado durante la sesion del navegador.
     if (!isPlatformBrowser(this.platformId)) {
       return [];
     }
@@ -35,6 +36,7 @@ export class CarritoService {
   }
 
   agregar(producto: Producto, cantidad = 1): RespuestaCarrito {
+    // Valida cantidad y stock en cliente para feedback inmediato.
     if (!Number.isInteger(cantidad) || cantidad < 1) {
       return { ok: false, mensaje: 'La cantidad minima es 1.', codigo: 'CANTIDAD_INVALIDA' };
     }
@@ -59,6 +61,7 @@ export class CarritoService {
   }
 
   actualizar(index: number, cantidad: number): RespuestaCarrito {
+    // Actualiza cantidad por posicion del item en el carrito.
     if (!Number.isInteger(index) || index < 0) {
       return { ok: false, mensaje: 'Item no encontrado en el carrito.', codigo: 'ITEM_NO_ENCONTRADO' };
     }
@@ -102,6 +105,7 @@ export class CarritoService {
   }
 
   limpiar(): RespuestaCarrito {
+    // Limpia carrito local tras compra exitosa o accion manual del usuario.
     this.guardar([]);
     this.marcarCambio();
     return { ok: true, mensaje: 'Carrito vaciado.' };
@@ -125,6 +129,7 @@ export class CarritoService {
   }
 
   motivoDescuento(): string {
+    // El calculo de descuento ahora ocurre en backend durante checkout.
     return 'El descuento se valida en el servidor durante el checkout.';
   }
 
@@ -153,6 +158,7 @@ export class CarritoService {
   }
 
   private marcarCambio(): void {
+    // Trigger para componentes que escuchan cambios de carrito en tiempo real.
     this._revision.update((value) => value + 1);
   }
 }

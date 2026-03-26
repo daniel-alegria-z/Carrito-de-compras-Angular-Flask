@@ -7,6 +7,7 @@ class ValidationError(Exception):
 
 
 def validar_items_payload(payload) -> list[dict]:
+    # Valida estructura minima del body y normaliza items a un shape consistente.
     if not isinstance(payload, dict):
         raise ValidationError("El cuerpo de la solicitud debe ser un objeto JSON.")
 
@@ -45,6 +46,7 @@ def validar_items_payload(payload) -> list[dict]:
 
 
 def validar_pago_payload(payload) -> tuple[str, dict]:
+    # Valida metodo y datos del cliente para evitar pagos con datos incompletos.
     if not isinstance(payload, dict):
         raise ValidationError("El cuerpo de la solicitud debe ser un objeto JSON.")
 

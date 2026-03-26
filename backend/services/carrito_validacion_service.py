@@ -9,10 +9,12 @@ MONEY_QUANTIZER = Decimal("0.01")
 
 
 def _money(value: Decimal) -> Decimal:
+    # Estandariza redondeo monetario para evitar diferencias entre cliente y servidor.
     return value.quantize(MONEY_QUANTIZER, rounding=ROUND_HALF_UP)
 
 
 def validar_y_calcular_carrito(items: list[dict]) -> dict:
+    # El backend es la fuente de verdad para existencia, stock y totales.
     product_ids = [item["id"] for item in items]
     productos = Producto.query.filter(Producto.id.in_(product_ids)).all()
     productos_por_id = {producto.id: producto for producto in productos}
@@ -33,6 +35,7 @@ def validar_y_calcular_carrito(items: list[dict]) -> dict:
         producto = productos_por_id[item["id"]]
         cantidad = item["cantidad"]
 
+        # Evita confirmar compras por encima del inventario actual.
         if cantidad > producto.stock:
             raise ValidationError(
                 (
@@ -57,6 +60,7 @@ def validar_y_calcular_carrito(items: list[dict]) -> dict:
             }
         )
 
+    # Calcula impuestos y total final del pedido.
     subtotal = _money(subtotal)
     iva = _money(subtotal * IVA_RATE)
     total = _money(subtotal + iva)

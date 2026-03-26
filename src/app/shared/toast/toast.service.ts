@@ -17,6 +17,7 @@ export class ToastService {
   readonly toasts = this._toasts.asReadonly();
 
   mostrar(tipo: TipoToast, mensaje: string, duracionMs = 2600): void {
+    // Inserta toast al final de la cola y programa autocierre.
     const id = ++this.secuencia;
     const item: ToastItem = { id, tipo, mensaje, cerrando: false };
     this._toasts.update((actual) => [...actual, item]);
@@ -25,6 +26,7 @@ export class ToastService {
   }
 
   ocultar(id: number): void {
+    // Primero marca como cerrando para permitir animacion de salida.
     let existe = false;
     this._toasts.update((actual) =>
       actual.map((item) => {
@@ -45,6 +47,7 @@ export class ToastService {
       return;
     }
 
+    // Remocion definitiva tras el tiempo de animacion.
     setTimeout(() => {
       this._toasts.update((actual) => actual.filter((item) => item.id !== id));
     }, 220);

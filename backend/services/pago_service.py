@@ -29,12 +29,14 @@ def _to_iso_utc(value: datetime) -> str:
 
 
 def _simular_pasarela() -> tuple[bool, str | None]:
+    # Simula una pasarela externa: 90% aprobado, 10% rechazado.
     if random.random() < APPROVAL_RATE:
         return True, None
     return False, random.choice(DECLINE_REASONS)
 
 
 def _generar_codigo_orden() -> str:
+    # Genera consecutivo diario legible para referencia de negocio.
     date_key = datetime.now(timezone.utc).strftime("%Y%m%d")
     prefix = f"ORD-{date_key}-"
 
@@ -55,6 +57,7 @@ def _generar_codigo_orden() -> str:
 
 
 def _generar_referencia_pago() -> str:
+    # Emula un id externo de la pasarela.
     date_key = datetime.now(timezone.utc).strftime("%Y%m%d")
     suffix = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     return f"REF-PAY-{date_key}-{suffix}"
@@ -79,11 +82,13 @@ def _construir_detalles_orden(orden: Orden) -> list[dict]:
 
 
 def procesar_pago(payload: dict) -> tuple[dict, int]:
+    # 1) Valida payload y recalcula carrito en servidor.
     items = validar_items_payload(payload)
     metodo, usuario = validar_pago_payload(payload)
 
     validacion = validar_y_calcular_carrito(items)["carrito"]
 
+    # 2) Simula respuesta de pasarela antes de tocar inventario.
     aprobado, motivo_rechazo = _simular_pasarela()
     if not aprobado:
         return (
@@ -97,6 +102,7 @@ def procesar_pago(payload: dict) -> tuple[dict, int]:
             402,
         )
 
+    # 3) Carga productos para validar stock nuevamente justo antes de confirmar.
     product_ids = [item["id"] for item in items]
     productos = Producto.query.filter(Producto.id.in_(product_ids)).all()
     productos_por_id = {producto.id: producto for producto in productos}
@@ -110,6 +116,7 @@ def procesar_pago(payload: dict) -> tuple[dict, int]:
         )
 
     try:
+        # Validacion final de stock para evitar inconsistencias por concurrencia.
         for item in items:
             producto = productos_por_id[item["id"]]
             if item["cantidad"] > producto.stock:
@@ -122,6 +129,7 @@ def procesar_pago(payload: dict) -> tuple[dict, int]:
                     status_code=400,
                 )
 
+        # 4) Construye cabecera de orden con valores monetarios consolidados.
         codigo_orden = _generar_codigo_orden()
         referencia = _generar_referencia_pago()
 
@@ -130,6 +138,7 @@ def procesar_pago(payload: dict) -> tuple[dict, int]:
         descuento = _money(Decimal(str(validacion["descuentoPrimeraCompra"])))
         total = _money(Decimal(str(validacion["total"])))
 
+        # 5) Persiste orden, detalle y pago; descuenta inventario en la misma transaccion.
         orden = Orden(
             codigo=codigo_orden,
             usuario_nombre=usuario["nombre"],
@@ -166,9 +175,11 @@ def procesar_pago(payload: dict) -> tuple[dict, int]:
         )
         db.session.add(pago)
 
+        # Commit atomico: o se guarda todo, o no se guarda nada.
         db.session.commit()
 
     except Exception:
+        # Si algo falla, revierte orden/pago y stock al estado anterior.
         db.session.rollback()
         raise
 
@@ -196,6 +207,7 @@ def procesar_pago(payload: dict) -> tuple[dict, int]:
 
 
 def obtener_orden(codigo_orden: str) -> tuple[dict, int]:
+    # Expone orden consolidada para pantalla de confirmacion en frontend.
     orden = Orden.query.filter_by(codigo=codigo_orden).first()
     if not orden:
         raise ValidationError(

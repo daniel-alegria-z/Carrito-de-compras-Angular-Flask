@@ -45,6 +45,7 @@ export class CheckoutResumenComponent implements DoCheck {
 
   ngDoCheck(): void {
     this.items = this.carritoService.getCarrito();
+    // Evita llamadas repetidas: solo revalida cuando cambia el contenido del carrito.
     const firmaActual = JSON.stringify(this.mapearItemsApi());
     if (firmaActual !== this.firmaItems) {
       this.firmaItems = firmaActual;
@@ -63,6 +64,7 @@ export class CheckoutResumenComponent implements DoCheck {
       return;
     }
 
+    // Construye payload compatible con backend y dispara proceso de pago.
     const payload = {
       items: this.mapearItemsApi(),
       metodo: this.metodo,
@@ -81,6 +83,7 @@ export class CheckoutResumenComponent implements DoCheck {
           return;
         }
 
+        // Compra confirmada: limpia carrito local y navega a confirmacion.
         this.carritoService.confirmarCompra();
         this.carritoService.limpiar();
         this.toast.mostrar('exito', response.redireccion?.mensaje ?? 'Pago exitoso.');
@@ -94,6 +97,7 @@ export class CheckoutResumenComponent implements DoCheck {
   }
 
   private validarEnServidor(): void {
+    // Sin items no hay nada que validar.
     if (this.items.length === 0) {
       this.subtotal = 0;
       this.iva = 0;
@@ -102,6 +106,7 @@ export class CheckoutResumenComponent implements DoCheck {
       return;
     }
 
+    // Totales y stock se validan con backend para mantener consistencia.
     this.validando = true;
     this.validacionService.validarCarrito(this.mapearItemsApi()).subscribe({
       next: (response) => {
@@ -124,6 +129,7 @@ export class CheckoutResumenComponent implements DoCheck {
   }
 
   private mapearItemsApi(): ItemCarritoApi[] {
+    // Convierte modelo local de carrito a shape esperado por API.
     return this.items.map((item) => ({
       id: item.producto.id,
       cantidad: item.cantidad,
@@ -131,6 +137,7 @@ export class CheckoutResumenComponent implements DoCheck {
   }
 
   private obtenerMensajeError(error: HttpErrorResponse): string {
+    // Prioriza mensaje de negocio retornado por backend si existe.
     if (!error.error) {
       return 'No fue posible conectar con el servidor.';
     }

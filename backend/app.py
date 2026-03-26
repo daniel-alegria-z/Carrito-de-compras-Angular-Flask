@@ -15,11 +15,13 @@ def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
+    # Configura logging y CORS global de la API.
     configure_logging(app)
     CORS(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}})
 
     db.init_app(app)
 
+    # Registra modulos de rutas.
     app.register_blueprint(productos_bp)
     app.register_blueprint(carrito_bp)
     app.register_blueprint(pagos_bp)
@@ -30,6 +32,7 @@ def create_app(config_object=Config):
 
     @app.errorhandler(ValidationError)
     def handle_validation_error(error: ValidationError):
+        # Errores de negocio/controlados: mantienen codigo y mensaje esperados por frontend.
         return (
             jsonify({"success": False, "error": error.message, "code": error.code}),
             error.status_code,
@@ -37,6 +40,7 @@ def create_app(config_object=Config):
 
     @app.errorhandler(Exception)
     def handle_unexpected_error(error: Exception):
+        # Error inesperado: se loguea detalle y se responde un mensaje generico.
         app.logger.exception("Unexpected server error")
         return (
             jsonify(
@@ -53,6 +57,7 @@ def create_app(config_object=Config):
     def init_db_command():
         """Create database tables."""
         with app.app_context():
+            # Crea todas las tablas segun los modelos SQLAlchemy.
             db.create_all()
             print("Database tables created.")
 
@@ -60,6 +65,7 @@ def create_app(config_object=Config):
     def seed_command():
         """Seed initial products."""
         with app.app_context():
+            # Inserta o actualiza productos base para pruebas locales.
             inserted, updated = seed_productos()
             print(f"Seed complete. inserted={inserted}, updated={updated}")
 

@@ -14,6 +14,7 @@ import { ToastService } from '../../../shared/toast/toast.service';
   styleUrl: './catalogo-inicio.css'
 })
 export class CatalogoInicioComponent implements OnInit, OnDestroy {
+  // Configuracion de frecuencia para mensajes de nudge.
   private readonly nudgeIntervalMs = 25000;
   private readonly nudgeFirstDelayMs = 5000;
   private readonly productoService = inject(ProductoService);
@@ -45,6 +46,7 @@ export class CatalogoInicioComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
+    // Inicia hooks de UX (audio + nudge) y luego carga catalogo desde servicio.
     this.instalarDesbloqueoAudio();
     this.iniciarNudgePeriodico();
 
@@ -66,6 +68,7 @@ export class CatalogoInicioComponent implements OnInit, OnDestroy {
   }
 
   agregar(producto: Producto): void {
+    // Desbloquea audio en primera interaccion y agrega al carrito.
     this.desbloquearAudio(true);
 
     const res = this.carritoService.agregar(producto, 1);
@@ -102,6 +105,7 @@ export class CatalogoInicioComponent implements OnInit, OnDestroy {
     void this.audioCtx.resume()
       .then(() => {
         this.audioDesbloqueado = true;
+        // Si habia nudge pendiente por bloqueo de autoplay, se dispara al desbloquear audio.
         if (this.pendingNudgeDisplay && this.carritoService.cantidad() === 0) {
           this.pendingNudgeDisplay = false;
           this.dispararNudge();
@@ -148,6 +152,7 @@ export class CatalogoInicioComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Primer nudge con delay corto y luego repeticion cada nudgeIntervalMs.
     this.nudgeFirstDelayId = window.setTimeout(() => {
       this.dispararNudge();
       this.nudgeIntervalId = window.setInterval(() => {
@@ -174,6 +179,7 @@ export class CatalogoInicioComponent implements OnInit, OnDestroy {
   }
 
   private dispararNudge(): void {
+    // El nudge solo aparece cuando el carrito sigue vacio.
     if (!isPlatformBrowser(this.platformId) || this.carritoService.cantidad() > 0) {
       this.mostrarNudge.set(false);
       this.pendingNudgeDisplay = false;
@@ -217,6 +223,7 @@ export class CatalogoInicioComponent implements OnInit, OnDestroy {
   }
 
   private reproducirSonido(tipo: 'exito' | 'error' | 'nudge'): boolean {
+    // Sintesiza un beep simple con WebAudio para feedback sin assets externos.
     if (!isPlatformBrowser(this.platformId) || !this.audioCtx || !this.audioDesbloqueado) {
       return false;
     }

@@ -8,6 +8,7 @@ def utcnow():
 
 
 class Producto(db.Model):
+    # Catalogo e inventario disponible para compra.
     __tablename__ = "producto"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +29,7 @@ class Producto(db.Model):
 
 
 class Orden(db.Model):
+    # Cabecera de compra confirmada.
     __tablename__ = "orden"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +50,7 @@ class Orden(db.Model):
 
 
 class OrdenDetalle(db.Model):
+    # Lineas de productos comprados por cada orden.
     __tablename__ = "orden_detalle"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -61,6 +64,7 @@ class OrdenDetalle(db.Model):
 
 
 class Pago(db.Model):
+    # Resultado del intento de cobro asociado a una orden.
     __tablename__ = "pago"
 
     id = db.Column(db.Integer, primary_key=True)

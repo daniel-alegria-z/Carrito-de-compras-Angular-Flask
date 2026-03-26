@@ -19,10 +19,12 @@ export class HeaderComponent implements DoCheck {
   rebote = false;
 
   ngDoCheck(): void {
+    // Fuerza reevaluacion cuando cambia el signal revision del carrito.
     this.carritoService.revision();
     this.cantidad = this.carritoService.cantidad();
     this.total = this.carritoService.total();
 
+    // Activa animacion breve cuando la cantidad total aumenta.
     if (this.cantidad > this.cantidadPrev) {
       this.rebote = true;
       setTimeout(() => {

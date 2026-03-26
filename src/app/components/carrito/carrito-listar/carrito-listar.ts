@@ -25,6 +25,7 @@ export class CarritoListarComponent implements DoCheck {
   motivoDescuento = '';
 
   ngDoCheck(): void {
+    // Recalcula resumen en cada cambio detectado del ciclo de Angular.
     this.items = this.carritoService.getCarrito();
     this.subtotal = this.carritoService.subtotal();
     this.iva = this.carritoService.iva();
@@ -49,6 +50,7 @@ export class CarritoListarComponent implements DoCheck {
       return;
     }
 
+    // Si baja de 1, la accion equivale a eliminar item.
     const nuevaCantidad = item.cantidad - 1;
     if (nuevaCantidad < 1) {
       const res = this.carritoService.eliminar(index);
@@ -71,6 +73,7 @@ export class CarritoListarComponent implements DoCheck {
   }
 
   irCheckout(): void {
+    // Bloquea navegacion al checkout si el carrito esta vacio.
     if (this.items.length === 0) {
       this.toast.mostrar('error', 'No hay productos para continuar al checkout.');
       return;
